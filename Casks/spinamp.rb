@@ -12,14 +12,14 @@ cask "spinamp" do
 
   # Apple Silicon only for now (the Intel build is not published yet).
   depends_on arch: :arm64
-  depends_on macos: ">= :ventura"
+  depends_on macos: :ventura
 
   app "Spinamp.app"
 
   # Early releases are not notarized yet, so macOS would block the first launch of a downloaded app.
   # Remove this block once releases are signed + notarized (see RELEASING.md).
-  postflight do
-    system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "#{appdir}/Spinamp.app"]
+  postflight_steps do
+    run "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "{{appdir}}/Spinamp.app"], must_succeed: false
   end
 
   zap trash: [
